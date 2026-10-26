@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "experiment": "symmetric-segment-mod23-chain-v1",
+  "status": "frozen-before-chain-evaluation",
+  "source_run": "symmetric-segment-mod23-selected-v2",
+  "source_dataset_sha256": "67bb0c6ae1cdb918d8a0b8470fe0e0dd944246f960986d830f708f658d9d24dc",
+  "source_checkpoint_sha256": "2c38193132ca3857850d5bf0a45b156a715129d7bfe36f48f1e7da39afda17e5",
+  "first_step": "Use each of the 46 saved test outputs as an operand in one more model call.",
+  "second_step": "For each first-step answer, choose the lexicographically first test pair containing that answer. Replace its matching operand image with the saved first-step output.",
+  "selection_uses_model_results": false,
+  "chain_count": 46,
+  "report": [
+    "first_step_accuracy",
+    "second_step_accuracy_with_generated_operand",
+    "second_step_accuracy_with_target_operand",
+    "both_steps_correct"
+  ]
+}

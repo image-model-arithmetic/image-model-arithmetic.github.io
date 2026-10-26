@@ -1,0 +1,120 @@
+{
+  "experiment": "mac-sana-binary-v1",
+  "status": "Prospective binary curriculum; separate from the failed decimal task",
+  "trigger": "After decimal OCR-arm evaluation, controls, export and demo have completed; no concurrent model work",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "initial_adapter": "Exact retained OCR-arm update-2000 checkpoint; chosen from development evidence before binary outputs; fresh optimizer and random generators",
+  "trainable": "existing rank-32 attention adapters and output projection; additionally the final four blocks' feed-forward networks, every feed-forward depthwise convolution, every scale-shift table, the original input patch projection, and a bias-free per-patch 34-to-2304 image conditioning projection",
+  "conditioning": "Top nine rows of clean reference VAE latents: each 32-channel image patch plus two fixed spatial coordinates is projected independently into the existing caption channel. There is no mixing of patches or symbolic arithmetic in the projection. The original SANA cross-attention processes these 144 image tokens.",
+  "objective": "Original answer-masked pure-noise flow MSE plus original foreground-weighted decoded pixel MSE plus 0.1 times frozen digit-recognizer cross-entropy on the generated carry and units crops",
+  "pixel_region": [
+    128,
+    288,
+    384,
+    512
+  ],
+  "foreground_weight": "1 + 4 * target darkness, with pixels in [-1,1]",
+  "vae": "original frozen SANA decoder; BF16 autocast with float32 master weights; no learned answer classifier",
+  "inference": "Unchanged one Euler step from fresh Gaussian answer noise; original pretrained SANA and original VAE decoder; image conditioning only; the digit recognizer is absent and no answer candidates or symbolic solver are used",
+  "training_sigma": 1.0,
+  "seed": 20260915,
+  "batch_size": 4,
+  "learning_rate": 0.0001,
+  "final_feedforward_learning_rate": 3e-05,
+  "weight_decay": 0.01,
+  "copy_only_updates": 0,
+  "copy_replay_probability_after_curriculum": 0.1,
+  "updates": 1200,
+  "development_endpoints": [
+    200,
+    600,
+    1200
+  ],
+  "checkpoint_selection": "Binary full 40-image development panel: addition then copying exactness, earliest tie; stop training at update 600 only if all 32 additions and 8 copies are template correct",
+  "resource_pilot": {
+    "updates": 10,
+    "median_update_seconds_maximum": 10.0,
+    "discard_pilot_optimizer_and_weights": true
+  },
+  "execution_budget_revision": "Original ten-second median update ceiling retained; time ten complete updates including the new frozen critic before admitting the schedule.",
+  "evaluation_seeds": {
+    "local": 2200915,
+    "program": 3300915,
+    "program_noise": 4400915
+  },
+  "gates": {
+    "local_exact_minimum": 0.95,
+    "unfamiliar_style_exact_minimum": 0.8,
+    "each_program_length_exact_minimum": 0.9
+  },
+  "claim_boundary": "Binary addition only, with all eight elementary facts supervised; raw-image carry composition on new 4-, 8-, and 16-bit programs. Decimal results remain separate failures. No withheld-fact induction, pretraining advantage, or autonomous routing claim.",
+  "critic": {
+    "architecture": "Three small convolutions and a ten-digit linear readout; grayscale 32 by 32 output crops only",
+    "weight": 0.1,
+    "training_only": true,
+    "sees_operands": false,
+    "arithmetic_training": false,
+    "font": "training font only",
+    "seed": 7120914,
+    "updates": 600,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "validation_seed": 8120914,
+    "validation_cases": 1000,
+    "minimum_validation_accuracy": 0.99,
+    "canonical_digits_correct_required": 10,
+    "cpu_mps_loss_absolute_tolerance": 0.0001,
+    "cpu_mps_gradient_relative_l2_tolerance": 0.0001,
+    "minimum_control_gradient_norm": 1e-06,
+    "control_gradient_descent_step": 0.001,
+    "control_loss_must_decrease": true
+  },
+  "critic_validation_protocol_sha256": "109d46c81e52a28e5b3b500b4e5ea9861cd50529cf44a2c8a2d5dbfa3a806228",
+  "critic_sha256": "85547605ecfc09128551c9876e8c4c2ad900312141135048390f282bcca4e103",
+  "binary": {
+    "radix": 2,
+    "input_values": [
+      0,
+      1
+    ],
+    "local_facts": 8,
+    "variants": 4,
+    "training_rows": 40,
+    "development_all_variants": true,
+    "development_noise_seed": 1100915,
+    "local_repetitions_per_fact": 25,
+    "local_cases_per_style": 200,
+    "program_lengths": [
+      4,
+      8,
+      16
+    ],
+    "programs_per_length": 32,
+    "program_generation": "NumPy default_rng; sample both LSB-first bit vectors, set highest bit to one; reject duplicate ordered operand pairs within each length; retain first 32 unique pairs",
+    "output_encoding": "Separate carry and units glyphs; record display label 10*carry+units for existing glyph losses, numeric value 2*carry+units for binary arithmetic",
+    "readout": "Unchanged ten-digit template banks and fixed Tesseract two-digit decimal whitelist; reject outputs containing any digit other than 0 or 1; no narrowed binary whitelist or correction",
+    "fixed_export_demo": {
+      "left": 13,
+      "right": 7,
+      "bits": 4,
+      "seed": 20260915
+    },
+    "early_stop": {
+      "step": 600,
+      "addition_correct": 32,
+      "copy_correct": 8
+    },
+    "unfamiliar_style_scope": "Only the input font changes; the supervised output convention remains training-font carry and units glyphs. Both fixed template banks remain permitted and the unchanged OCR parser may reject any malformed or unreadable output."
+  },
+  "initial_checkpoint_sha256": "513938d3ba286b4be0b7fcb704df195210c60d39eeb1319a6c196f9b71c78a7d",
+  "evaluation": {
+    "local_cases": 200,
+    "programs_per_length": 32,
+    "lengths": [
+      4,
+      8,
+      16
+    ]
+  }
+}

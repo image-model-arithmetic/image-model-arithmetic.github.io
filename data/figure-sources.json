@@ -1,0 +1,26 @@
+{
+  "source-1431.png": {
+    "sha256": "a5953d51f774e11aced430d1238c77445915bed11ce28ce44b793cbd99a93bd6",
+    "origin": "Saved digit crop from the paper\u2019s handoff example"
+  },
+  "source-1615.png": {
+    "sha256": "c268e00b81428bbbcace276ea3586546c94dad64caf4bd3a016b46f340d648c0",
+    "origin": "Saved digit crop from the paper\u2019s handoff example"
+  },
+  "source-1654.png": {
+    "sha256": "527ff0771666872afaaea616c36121f70eaeb1f873772965b1a1d86debe5dd7d",
+    "origin": "Saved digit crop from the paper\u2019s handoff example"
+  },
+  "source-1681.png": {
+    "sha256": "4ff87e456f52e1965ad34b0a282d1e8cc17131d1f3a3bf561a01fce2addcc44e",
+    "origin": "Saved digit crop from the paper\u2019s handoff example"
+  },
+  "learning-curves.svg": {
+    "sha256": "19a587ee6eadf7b301751cc9a736dda85e7e33e5013ba0534c38054aad26bc82",
+    "origin": "mod23-learning-curves-v6.svg"
+  },
+  "held-out-examples.svg": {
+    "sha256": "290197bf65602a251b342d21d6bd6565fe460765bba7689c19f14d15c12cae90",
+    "origin": "unseen-mod23-v6.svg"
+  }
+}

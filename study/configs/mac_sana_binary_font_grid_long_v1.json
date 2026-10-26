@@ -1,0 +1,41 @@
+{
+  "admission": "Run only after mac-sana-binary-font-grid-v1 has completed generation, controls, export, fixed demo and independent audit, with audited_success and integrity_passed both true. All previous model and checkpoint serialization jobs must have exited.",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "checkpoint": "The exact best checkpoint chosen by the unchanged parent development rule; record its full SHA-256 at admission. No weight or sampling changes.",
+  "claim_boundary": "Length extension after the separately registered font-grid binary adaptation; Length extension of visual composition of eight supervised elementary binary facts under a supplied column schedule. Not decimal arithmetic, autonomous algorithm discovery, unseen elementary-fact induction, or evidence that pretraining outperforms scratch training.",
+  "exclusions": "None; malformed outputs and incomplete programs cannot count as correct.",
+  "experiment": "mac-sana-binary-font-grid-long-v1",
+  "gates": {
+    "both_readers_must_satisfy_every_gate": true,
+    "independent_integrity_audit_required": true,
+    "program_exactness": "A program counts as correct only if every intermediate subtotal and the final answer are numerically correct and every generated output is valid under both unchanged readers.",
+    "random_correct_per_length_minimum": 29,
+    "random_count_per_length": 32,
+    "stress_correct_required": 4
+  },
+  "inference": "Identical parent one-step sampler, original VAE, input font and raw generated carry crop. The only extension is the number of calls in the supplied right-to-left column schedule. No OCR, solver, candidate selection or output repair in generation.",
+  "lengths": [
+    32,
+    64
+  ],
+  "noise_seed": 14400922,
+  "parent_protocol_sha256": "5132ddc490c1906b97d1c377963ae56f8f193eafc9ada966e18e067657543da6",
+  "program_seed": 13300922,
+  "random_generation": "NumPy default_rng; sample LSB-first bit vectors with top bit one for each operand; reject duplicate ordered pairs within each length; keep the first 32 unique pairs.",
+  "random_programs_per_length": 32,
+  "readers": "Unchanged parent ten-digit template banks and Tesseract 5.5.3, crop [128,300,384,488], psm 7, whitelist 0123456789. Require exactly two binary digits after removing whitespace. No repairs or narrowed whitelist.",
+  "resources": {
+    "maximum_controller_hours": 6,
+    "maximum_seconds_per_complete_image": 5.0,
+    "minimum_disk_gib": 40,
+    "one_heavy_job_at_a_time": true,
+    "resume": "Persist every generated stage and its input/output hashes and seed. On recovery validate the complete saved prefix and continue from its last unaltered carry crop."
+  },
+  "stage_seed": "noise_seed + length*10000 + program_index*1000 + stage; random program indices 0..31, stress indices 100 and 101",
+  "status": "Prospective conditional length-extension evaluation; no further training",
+  "stress_programs_per_length": [
+    "maximum-plus-one",
+    "maximum-plus-maximum"
+  ]
+}

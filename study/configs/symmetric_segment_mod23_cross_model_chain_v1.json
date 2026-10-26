@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "experiment": "symmetric-segment-mod23-cross-model-chain-v1",
+  "status": "frozen-before-evaluation",
+  "created_date": "2026-09-18",
+  "question": "Can separately trained models pass a generated answer into a second addition when both operand pairs were left out of training?",
+  "dataset_sha256": "67bb0c6ae1cdb918d8a0b8470fe0e0dd944246f960986d830f708f658d9d24dc",
+  "model_config_sha256": "7e33dd8e2fdf2c21b5a51e3655df379b0da26f685bd4ba55477db0a4d88de81b",
+  "selection": {
+    "rule": "Include every training run with at least 40 of 46 development pairs correct.",
+    "uses_test": false,
+    "seed_indices": [0, 1, 2],
+    "development_correct": [42, 44, 40]
+  },
+  "checkpoint_sha256": {
+    "0": "0edeb25c3f7aa7d98ffb4b995831aab999cd0a2ebb33f24dfca24ce62a39455a",
+    "1": "2c38193132ca3857850d5bf0a45b156a715129d7bfe36f48f1e7da39afda17e5",
+    "2": "f2f0307c3586e5d86c891ef01340595e9632d1b26ee825befbac972a6dfe47e0"
+  },
+  "first_step": "Each source model adds all 46 test pairs and draws the answer.",
+  "second_step": "For each first answer, choose the lexicographically first test pair containing that answer. Replace the matching operand image with the source model's generated answer.",
+  "controls": "For every receiving model, repeat the second step with the target first-answer image.",
+  "matrix": "Evaluate all nine ordered source-receiver pairs, including three diagonal controls and six pairs of separately trained models.",
+  "primary_counts": [
+    "first answers read correctly",
+    "both additions correct",
+    "correct generated first answers that fail only after substitution",
+    "correct generated first answers that repair a canonical-input failure"
+  ]
+}

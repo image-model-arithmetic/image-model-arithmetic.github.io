@@ -1,0 +1,13 @@
+{
+  "protocol": "mac-sana-pixel-independent-readout-audit-v1",
+  "timing": "Declared before pixel-arm independent evaluation; checkpoint selection continues to use only the originally registered development metric",
+  "template_metric": "Original registered two-font template readout and unchanged validity predicates",
+  "independent_reader": "tesseract 5.5.3",
+  "ocr_command": "tesseract stdin stdout --psm 7 -c tessedit_char_whitelist=0123456789",
+  "crop": [128, 300, 384, 488],
+  "parser": "Exactly two decimal digits after removing whitespace; otherwise invalid",
+  "consensus": "Both template and OCR predictions must equal the expected subtotal; every intermediate subtotal must pass for a composed program",
+  "consensus_thresholds": {"familiar": 0.95, "unfamiliar": 0.8, "each_program_length": 0.9},
+  "success": "Artifact integrity, every original numerical gate, and every independent consensus gate must pass",
+  "exclusions": "No alternate OCR settings, answer repair, best-of sampling, or manual overrides can rescue a disagreement in this audit"
+}

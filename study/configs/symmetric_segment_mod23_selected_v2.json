@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "experiment": "symmetric-segment-mod23-selected-v2",
+  "status": "frozen-before-training",
+  "registered_at": "2026-09-17T00:30:00-07:00",
+  "question": "Can development-based restart selection produce a reliable image model for unseen addition pairs?",
+  "dataset": {
+    "path": "data/symmetric-segment-mod23-v2",
+    "sha256": "67bb0c6ae1cdb918d8a0b8470fe0e0dd944246f960986d830f708f658d9d24dc",
+    "manifest_sha256": "672f39be9190b2c1dedbf8df7b7c6b4a13ee488568a6f1ec54b2e3a743cccfef",
+    "split_seed": 2026091705,
+    "variants_per_pair": 4,
+    "training_pair_count": 184,
+    "development_pair_count": 46,
+    "test_pair_count": 46,
+    "split_rule": "For each of 23 answers, eight unordered pairs train the model, two choose checkpoints and the restart, and two remain sealed for one final test.",
+    "answer_pixels_in_input": false
+  },
+  "model": {
+    "family": "shared numeral reader, symmetric two-operand transformer, continuous raster writer",
+    "initialization": "scratch",
+    "width": 64,
+    "layers": 2,
+    "heads": 4,
+    "mlp_ratio": 4,
+    "parameter_count": 285760,
+    "output_pixels": 896,
+    "categorical_output_head": false
+  },
+  "seeds": [
+    {"model": 2026091901, "training": 2026091911},
+    {"model": 2026091902, "training": 2026091912},
+    {"model": 2026091903, "training": 2026091913},
+    {"model": 2026091904, "training": 2026091914},
+    {"model": 2026091905, "training": 2026091915}
+  ],
+  "optimization": {
+    "learning_rate": 0.001,
+    "weight_decay": 1.0,
+    "betas": [0.9, 0.98],
+    "epsilon": 1e-8,
+    "gradient_clip": 1.0,
+    "ink_weight": 4.0,
+    "bce_weight": 0.5,
+    "max_steps": 100000,
+    "batch_construction": "One randomly chosen rendering from every training pair at each update."
+  },
+  "evaluation": {
+    "every_steps": 1000,
+    "batch_size": 276,
+    "test_rule": "Train all five restarts without test evaluation. Select one from development results. Evaluate the sealed test once.",
+    "swap_audit": "Exchange the two operand rasters for every test pair and run one more forward pass."
+  },
+  "selection": {
+    "rule": "Within each restart, use highest development exact-raster rate, then development accuracy, then training exact-raster rate, then lowest development pixel error.",
+    "uses_test": false
+  },
+  "selection_across_seeds": {
+    "enabled": true,
+    "rule": "Choose the restart with highest development exact-raster rate, then development accuracy, then training exact-raster rate, then lowest development pixel error.",
+    "uses_test": false
+  },
+  "execution": {
+    "metrics_every_steps": 100,
+    "backend": "MLX on the M4 Mac mini",
+    "seed_order": [0, 1, 2, 3, 4]
+  },
+  "resources": {
+    "free_floor_bytes": 42949672960,
+    "minimum_memory_free_percent": 15
+  },
+  "reporting": {
+    "include_all_development_results": true,
+    "success_accuracy": 0.9,
+    "primary_metrics": ["sealed test accuracy", "sealed test exact-raster rate"]
+  }
+}

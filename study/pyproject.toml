@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "anonymous-visual-arithmetic"
+version = "0.1.0"
+description = "Verifiable image-output arithmetic experiments"
+requires-python = ">=3.11"
+dependencies = [
+  "pillow==11.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.1",
+]
+baseline = [
+  "accelerate==1.14.0",
+  "diffusers==0.39.0",
+  "ftfy==6.3.1",
+  "numpy==2.3.5",
+  "peft==0.19.1",
+  "safetensors==0.8.0",
+  "sentencepiece==0.2.1",
+  "torchvision==0.28.0",
+  "transformers==5.13.0",
+]
+ocr = [
+  "opencv-contrib-python==4.10.0.84",
+  "paddleocr==3.7.0",
+  "paddlepaddle==3.2.2",
+]
+pixeldit = [
+  "pyrallis==0.3.1",
+  "termcolor==3.3.0",
+]
+tiny = [
+  "numpy==2.3.5",
+  "torch==2.13.0",
+]
+mlx = [
+  "huggingface-hub==1.29.0",
+  "mlx==0.32.2",
+  "numpy==2.3.5",
+  "safetensors==0.8.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/image_reasoning"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

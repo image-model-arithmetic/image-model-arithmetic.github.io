@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "experiment": "symmetric-segment-mod23-replication-v1",
+  "status": "frozen-before-training",
+  "registered_at": "2026-09-17T00:00:00-07:00",
+  "question": "Can a scratch image model draw answers for unseen addition pairs when development and test pairs are separate?",
+  "dataset": {
+    "path": "data/symmetric-segment-mod23-v1",
+    "sha256": "f50acbb5982009e9dd56e09454c1cb902ce1bb799bda3b7467f32ccfa3c22e92",
+    "manifest_sha256": "72802f3a65a1d0c5c2f420dbc07f6d55af30d301858e422df271617d17610a34",
+    "split_seed": 2026091704,
+    "variants_per_pair": 4,
+    "training_pair_count": 184,
+    "development_pair_count": 46,
+    "test_pair_count": 46,
+    "split_rule": "For each of 23 answers, eight unordered operand pairs train the model, two choose the checkpoint, and two remain sealed for the final test.",
+    "input": "A 104 by 32 raster containing two seven-segment numbers, a plus sign, and an equals sign.",
+    "output": "A 28 by 32 raster containing the answer modulo 23.",
+    "answer_pixels_in_input": false
+  },
+  "model": {
+    "family": "shared numeral reader, symmetric two-operand transformer, continuous raster writer",
+    "initialization": "scratch",
+    "width": 64,
+    "layers": 2,
+    "heads": 4,
+    "mlp_ratio": 4,
+    "parameter_count": 285760,
+    "output_pixels": 896,
+    "categorical_output_head": false
+  },
+  "seeds": [
+    {"model": 2026091801, "training": 2026091811},
+    {"model": 2026091802, "training": 2026091812},
+    {"model": 2026091803, "training": 2026091813}
+  ],
+  "optimization": {
+    "learning_rate": 0.001,
+    "weight_decay": 1.0,
+    "betas": [0.9, 0.98],
+    "epsilon": 1e-8,
+    "gradient_clip": 1.0,
+    "ink_weight": 4.0,
+    "bce_weight": 0.5,
+    "max_steps": 100000,
+    "batch_construction": "One randomly chosen rendering from every training pair at each update."
+  },
+  "evaluation": {
+    "every_steps": 1000,
+    "batch_size": 276,
+    "test_rule": "Load the checkpoint chosen from development results, then evaluate the test pairs once.",
+    "swap_audit": "Exchange the two operand rasters for every test pair and run one more forward pass."
+  },
+  "selection": {
+    "rule": "Highest development exact-raster rate, then development answer accuracy, then training exact-raster rate, then lowest development pixel error.",
+    "uses_test": false
+  },
+  "execution": {
+    "metrics_every_steps": 100,
+    "backend": "MLX on the M4 Mac mini",
+    "seed_order": [0, 1, 2]
+  },
+  "resources": {
+    "free_floor_bytes": 42949672960,
+    "minimum_memory_free_percent": 15
+  },
+  "reporting": {
+    "include_all_registered_seeds": true,
+    "primary_metrics": ["test accuracy", "test exact-raster rate"],
+    "success_threshold": "At least 90 percent test accuracy for every seed."
+  }
+}

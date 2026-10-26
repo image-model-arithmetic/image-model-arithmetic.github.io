@@ -1,0 +1,28 @@
+{
+  "experiment": "mac-sana-column-prototype-v1",
+  "status": "prospective-development-followup-before-parent-arithmetic-endpoints",
+  "trigger": "Explicit development transition after parent checkpoint 800: 1/40 dual-reader addition and 0/10 copying; no independent evaluation seen",
+  "initialization": "verified parent checkpoint 800, selected by the fixed local development panel",
+  "reason": "At 200 copying updates, decreasing flow loss did not produce readable correct glyphs; add a training-only loss separating correct answer images from the other answer images",
+  "objective": "original masked flow MSE plus 0.25 cross-entropy of negative answer-region latent distances to twenty fixed image prototypes, temperature 0.025",
+  "prototypes": "averages of canonical training target VAE latents for each subtotal; used only during optimization, never generation",
+  "updates": 4000,
+  "learning_rate": 0.0001,
+  "batch_size": 4,
+  "copy_replay_probability": 0.2,
+  "seed": 20260911,
+  "checkpoint_selection": "fixed development endpoints at 400, 1200, 2400 and 4000; addition then copy exactness; first on ties",
+  "inference": "unchanged pretrained SANA plus trained adapters; clean raster context and noise only; twelve Euler steps; no prototypes, answer candidates, OCR, solver or verifier",
+  "independent_evaluation_seeds": {
+    "local": 2200911,
+    "program": 3300911,
+    "program_noise": 4400911
+  },
+  "gates": {
+    "local_exact_minimum": 0.95,
+    "unfamiliar_style_exact_minimum": 0.8,
+    "each_program_length_exact_minimum": 0.9
+  },
+  "claim_boundary": "development adaptation of a pretrained image diffusion model; no claim of pretraining benefit, withheld elementary-fact induction, or autonomous routing",
+  "prior_plan_preserved": "prototype-protocol-original.json records the earlier conditional 1200-update plan; revised before any prototype-arm optimizer update"
+}

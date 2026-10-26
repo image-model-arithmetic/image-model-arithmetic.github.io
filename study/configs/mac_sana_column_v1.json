@@ -1,0 +1,49 @@
+{
+  "experiment": "mac-sana-column-v1",
+  "status": "prospective-development-protocol",
+  "model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "pretrained_transformer_sha256": "4616f5f26161c4f072083edcd9b771b8a840057602e928dca00c8a05175b22a3",
+  "training": {
+    "scope": "rank-32 linear adapters in pretrained SANA self attention and cross attention; pretrained output projection also trainable",
+    "caption": "constant all-zero single-token embedding; no text encoder or task information",
+    "conditioning": "clean answer-free VAE context outside bottom seven latent rows, identically clamped in train and sampling",
+    "target": "two-digit raster subtotal a+b+carry with all 200 local cases trained",
+    "variants": 4,
+    "copy_curriculum_updates": 200,
+    "max_updates": 4000,
+    "learning_rate": 0.0003,
+    "batch_size": 4,
+    "weight_decay": 0.01,
+    "seed": 20260910,
+    "sampling_steps": 12,
+    "selection": "development local-column accuracy only; independent program tests after final checkpoint"
+  },
+  "evaluation": {
+    "local_cases": 200,
+    "development_noise_seed": 1100910,
+    "independent_noise_seed": 2200910,
+    "program_seed": 3300910,
+    "programs_per_length": 32,
+    "lengths": [
+      2,
+      4,
+      8
+    ],
+    "runtime": "fixed right-to-left schedule; only raw generated carry crop passed to next column; classify after all stages",
+    "primary_local_exact_min": 0.95,
+    "primary_program_exact_min": 0.9,
+    "unfamiliar_font_exact_min": 0.8,
+    "malformed_outputs": "count as incorrect",
+    "claim_boundary": "pretrained image diffusion adaptation and raster-mediated composition of fully supervised elementary facts; no claim of unseen local-fact induction or pretraining benefit without a scratch comparison",
+    "program_correctness": "final sum, valid images at every stage, and every generated subtotal independently correct after generation finishes"
+  },
+  "resource": {
+    "max_mps_fraction": 0.65,
+    "min_disk_gib": 40,
+    "max_session_seconds": 18000,
+    "pilot_steps": 10,
+    "max_pilot_step_seconds": 20,
+    "minimum_memory_free_percent": 15
+  }
+}

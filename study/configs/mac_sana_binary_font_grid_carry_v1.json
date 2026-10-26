@@ -1,0 +1,83 @@
+{
+  "admission": "Only after the font-grid parent passes every independent gate and its queued length test completes with verified integrity. No concurrent model job. The length test may fail mathematically; this remains a separate causal control.",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "cases": {
+    "counterfactual_pairs": 80,
+    "donors": 8,
+    "exact_repeat_controls": 16,
+    "total_images": 184
+  },
+  "checkpoint": "Exact earliest-best parent checkpoint; no further training or selection on these outputs.",
+  "claim_boundary": "A causal test that changing generated carry pixels changes the arithmetic output with operands and noise held fixed, in the trained output convention and input font. All local facts were supervised. This does not establish a pretraining advantage, autonomous scheduling, general font robustness, or decimal arithmetic.",
+  "design": "Eight donor outputs cover all eight binary facts, paired into four banks with expected carry0/1. For each bank and operand pair, five Gaussian seeds are each used for both incoming-carry interventions. All pixels outside the incoming-carry rectangle and the generation noise are identical within a pair. For the first seed of each bank/operand pair, regenerate carry0 after carry1 and require pixel-exact repeatability. Donor crops are unmodified generated pixels.",
+  "donor_pairs": [
+    [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0
+      ]
+    ],
+    [
+      [
+        0,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        1
+      ]
+    ],
+    [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1
+      ]
+    ],
+    [
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        1
+      ]
+    ]
+  ],
+  "donor_seed": 28810923,
+  "experiment": "mac-sana-binary-font-grid-carry-v1",
+  "gates": {
+    "donors_correct_required": 8,
+    "each_donor_bank_minimum": 19,
+    "each_operand_pair_minimum": 19,
+    "exact_repeat_controls_required": 16,
+    "paired_consensus_minimum": 76,
+    "pairs_required": 80
+  },
+  "parent_protocol_sha256": "5132ddc490c1906b97d1c377963ae56f8f193eafc9ada966e18e067657543da6",
+  "readers": "Identical parent full ten-digit template banks and Tesseract5.5.3 crop/psm/whitelist/two-binary-digit parser. No image repair, retry, narrowed whitelist, or exclusions. A pair is correct only if both counterfactual subtotals are valid and exact under both readers.",
+  "receiver_seed": 39910923,
+  "resources": {
+    "maximum_controller_hours": 1,
+    "maximum_seconds_per_complete_image": 5.0,
+    "minimum_disk_gib": 40,
+    "one_heavy_job_at_a_time": true
+  }
+}

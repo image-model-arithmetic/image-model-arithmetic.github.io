@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Can Generative Image Models Reason Through Each Other’s Outputs?</title>
+<meta name="description" content="Image-to-image models solve held-out arithmetic and pass drawn answers to separately trained models. Explore the experiments, generated images and results.">
+<meta property="og:title" content="Can Generative Image Models Reason Through Each Other’s Outputs?">
+<meta property="og:description" content="Held-out arithmetic, image handoffs between separately trained models, and repeated calculation through generated digits.">
+<meta property="og:url" content="https://dhruv9saini.github.io/image-model-arithmetic.github.io/"><meta property="og:image" content="https://dhruv9saini.github.io/image-model-arithmetic.github.io/assets/social.png">
+<link rel="canonical" href="https://dhruv9saini.github.io/image-model-arithmetic.github.io/"><link rel="icon" href="assets/favicon.svg"><meta name="color-scheme" content="light">
+<link rel="stylesheet" href="assets/bulma.min.css"><link rel="stylesheet" href="assets/template.css"><link rel="stylesheet" href="assets/site.css"><link rel="stylesheet" href="assets/arithmetic.css">
+<script type="module" src="assets/arithmetic.js"></script>
+</head><body>
+<a class="skip-link" href="#overview">Skip to content</a>
+<nav class="site-nav" aria-label="Page navigation"><a class="wordmark" href="#">Image-model arithmetic</a><div><a href="#overview">Overview</a><a href="#results">Results</a><a href="#visualizations">Explore</a></div></nav>
+<main>
+<section class="hero"><div class="hero-body"><div class="container is-max-desktop has-text-centered">
+<h1 class="title is-1 publication-title">Can Generative Image Models Reason Through Each Other’s Outputs?</h1>
+<div class="is-size-5 publication-authors"><a href="https://github.com/dhruv9saini">Dhruv Saini</a></div>
+<div class="publication-links"><a class="button is-dark is-rounded" href="paper/image-model-arithmetic.pdf">Paper ↗</a><a class="button is-dark is-rounded" href="https://github.com/dhruv9saini/image-model-arithmetic.github.io/tree/main/study">Experiment code ↗</a><a class="button is-dark is-rounded" href="#results">Results ↓</a><a class="button is-dark is-rounded" href="#visualizations">Explore ↓</a></div>
+</div></div></section>
+
+<section class="teaser container is-max-desktop" aria-labelledby="handoff-title">
+<div class="handoff-demo">
+<div class="demo-heading"><h2 id="handoff-title">One model draws an answer. Another uses that drawing.</h2><span>Saved experiment</span></div>
+<div class="first-problem"><div><span class="step-label">First problem</span><div class="equation">9 + 14 <small>(mod 23)</small></div></div><span class="flow-arrow" aria-hidden="true">→</span><div class="model-box">Model A</div><span class="flow-arrow" aria-hidden="true">→</span><figure class="digit"><img src="assets/source-1615.png" alt="Model A’s generated answer, read as zero" width="64" height="73"><figcaption>Drawn 0</figcaption></figure></div>
+<div class="comparison-controls"><span>Give Model B the same next problem with:</span><div role="group" aria-label="Digit image in the second problem"><button data-image="clean" aria-pressed="false">Clean digit</button><button data-image="generated" aria-pressed="true">Model A’s drawing</button></div></div>
+<div class="second-problem"><div class="second-input"><figure class="digit"><img id="input-digit" src="assets/source-1615.png" alt="Generated zero used as the next input" width="64" height="73"></figure><span class="equation">+ 8</span></div><span class="flow-arrow" aria-hidden="true">→</span><div class="model-box">Model B</div><span class="flow-arrow" aria-hidden="true">→</span><figure class="digit"><img id="output-digit" src="assets/source-1681.png" alt="Model B’s generated answer, read as eighteen" width="64" height="73"></figure><div class="answer-status" id="answer-status" aria-live="polite"><strong>18 · incorrect</strong><span>Expected 8</span></div></div>
+<p class="demo-caption">Both input images are read as 0. Changing only the digit image changes Model B’s answer. <a href="#visualizations">See how often this happens ↓</a></p>
+</div>
+</section>
+
+<section id="overview" class="section overview"><div class="container is-max-desktop"><h2 class="title is-3 has-text-centered">Abstract</h2><div class="content prose">
+<p>Can separately trained image models use one another’s drawings to solve a new problem? We train five models from scratch to draw the sum of two pictured numbers modulo 23. Three meet the preset development threshold and enter the transfer experiment. A program copies one model’s drawn answer into a second, held-out addition for another model, without converting it to text. Both sums are correct in 76% of all planned trials between different models. We also test the second addition with a clean image of the same number. When the first drawing is correct and the second model solves the clean version, it also solves the version with the drawing in 98% of trials.</p>
+<p>In a separate binary-addition experiment, seven independently trained models correctly use one another’s generated digits in 99% of tests between different models. A SANA image generator and a CNN trained from scratch also alternate through complete multiplication problems. Yet changing the appearance of a correctly read digit sometimes changes the next answer. The models can calculate from new operand pairs and other models’ drawings, but their calculations still depend on how those numbers are drawn.</p>
+</div></div></section>
+
+<section id="results" class="section results-section"><div class="container results-container">
+<div class="section-heading"><h2 class="title is-3">Results</h2><a href="data/results.json">Download data ↗</a></div>
+<div class="section-intro"><p>The experiments test new operand pairs, drawings passed between separately trained models, and repeated calculation. The counts distinguish complete two-step trials from the comparison that isolates the effect of a generated digit.</p></div>
+<div class="results-table-wrap"><table class="results-table"><caption class="sr-only">Results from the full preprint</caption><thead><tr><th scope="col">Experiment</th><th scope="col">Result</th><th scope="col">What is counted</th></tr></thead><tbody>
+<tr><th scope="row">Held-out addition, one step</th><td>89.1%</td><td>Mean accuracy of the three selected runs: 41, 44 and 38 correct out of 46 pairs each.</td></tr>
+<tr><th scope="row">Two additions across different models</th><td>210 / 276 <small>76.1%</small></td><td>Both answers correct, counting every planned different-model trial.</td></tr>
+<tr><th scope="row">Generated digit replaces a clean digit</th><td>210 / 215 <small>97.7%</small></td><td>Different-model trials where the first drawing is correct and the second model solves the clean-digit version.</td></tr>
+<tr><th scope="row">Binary addition across different models</th><td>663 / 672 <small>98.7%</small></td><td>Correct next answers across seven models; both independent digit readers must agree.</td></tr>
+<tr><th scope="row">Alternating-model multiplication</th><td>56 / 56</td><td>Correct final products across the tested two-, four- and eight-bit operand pairs.</td></tr>
+</tbody></table></div>
+<p class="table-note">The modulo-23 exchange uses three of five independently trained runs, selected by a development score of at least 40/46 before evaluating the held-out test pairs.</p>
+</div></section>
+
+<section id="visualizations" class="section"><div class="container results-container">
+<div class="section-heading"><h2 class="title is-3">Passing drawings between models</h2></div>
+<div class="section-intro"><p>Each row shows which model drew the first answer; each column shows which model uses that drawing in the next addition. Select an experiment, then a cell to inspect its result.</p></div>
+<div class="experiment-tabs" role="group" aria-label="Matrix experiment"><button data-matrix="mod23" aria-pressed="true">Held-out addition</button><button data-matrix="binary" aria-pressed="false">Binary addition</button><button data-matrix="appearance" aria-pressed="false">Change digit appearance</button></div>
+<p id="matrix-explanation">Each cell counts correct next answers among trials where the first drawing is read correctly and the second model solves the clean-digit version.</p>
+<div class="matrix-layout"><div class="matrix-panel"><div class="matrix-axis">Receiving model →</div><div class="matrix-scroll" tabindex="0" role="region" aria-label="Interactive model exchange results"><table id="exchange-matrix"><caption class="sr-only">Source model by receiving model</caption><thead></thead><tbody></tbody></table></div><div class="matrix-legend"><span class="diagonal-swatch" aria-hidden="true"></span>Outline marks the same-model control.</div></div><div class="cell-details" aria-live="polite"><span id="cell-kicker">First model → second model</span><h3 id="cell-title">Run 1 → Run 2</h3><div id="cell-result">37 / 39</div><p id="cell-description">Correct second answers when the first drawing is correct and the clean-digit version succeeds.</p><p id="matrix-total">Different models: 210 / 215 (97.7%). All planned different-model trials: 210 / 276 (76.1%).</p></div></div>
+</div></section>
+
+<section class="section repeated-section"><div class="container results-container"><h2 class="title is-3">Repeated calculation</h2>
+<div class="section-intro"><p>A control program coordinates the partial products and passes generated images between a SANA model and a CNN trained from scratch. The models alternate after every call. All 56 tested multiplication programs calculate the final product correctly.</p></div>
+<div class="results-table-wrap"><table class="results-table compact-table"><caption class="sr-only">Alternating SANA and CNN multiplication results</caption><thead><tr><th scope="col">Operand width</th><th scope="col">Correct products</th><th scope="col">Calls per program</th><th scope="col">Longest dependent sequence</th></tr></thead><tbody><tr><th scope="row">2 bits</th><td>16 / 16</td><td>6</td><td>—</td></tr><tr><th scope="row">4 bits</th><td>20 / 20</td><td>28</td><td>9 calls</td></tr><tr><th scope="row">8 bits</th><td>20 / 20</td><td>120</td><td>21 calls</td></tr></tbody></table></div>
+<p class="table-note">Total calls include independent partial products. The longest dependent sequence counts only calls linked by generated outputs; at eight bits it includes 20 successive switches between the two models.</p>
+</div></section>
+
+<section class="section training-section"><div class="container is-max-desktop"><h2 class="title is-3">Learning additions the models have not seen</h2><div class="content prose"><p>Inputs show numbers from 0 to 22 as seven-segment digits. The model draws their sum modulo 23: for example, 9 + 14 wraps around to 0. Of 276 unordered number pairs, 184 are used for training, 46 for development and 46 for testing. All answers appear in every split; the held-out operand pairs are new.</p></div>
+<figure class="paper-figure"><a href="assets/learning-curves.svg" target="_blank" rel="noopener"><img src="assets/learning-curves.svg" width="978" height="399" loading="lazy" alt="Development accuracy over training for all five runs. Three reach the 40 out of 46 selection criterion; two do not."></a><figcaption>All five training runs. The three selected checkpoints are chosen using development results before the exchange tests.</figcaption></figure>
+<figure class="paper-figure"><a href="assets/held-out-examples.svg" target="_blank" rel="noopener"><img src="assets/held-out-examples.svg" width="878" height="555" loading="lazy" alt="Run 2 results: 44 of 46 held-out additions correct and 41 of 46 complete two-step tests, with four correct generated images and two first-step errors."></a><figcaption>Run 2 solves 44/46 held-out first problems and completes both steps in 41/46 tests. The saved images show four correct first answers and both errors.</figcaption></figure>
+</div></section>
+
+<section class="section scope"><div class="container is-max-desktop"><h2 class="title is-4">Scope</h2><p>The models work with fixed digit boxes. A program chooses the operations and places the images; the models do not choose their own sequence of steps. Binary training includes all eight local addition cases. Modulo-23 testing holds out operand pairs within the same family of digit renderings. These experiments establish input-output behavior, not the models’ internal calculation method.</p></div></section>
+</main>
+<footer class="footer"><div class="container is-max-desktop"><p><a href="paper/image-model-arithmetic.pdf">Paper</a> · <a href="https://github.com/dhruv9saini/image-model-arithmetic.github.io/tree/main/study">Experiment code</a> · <a href="https://cad-bench.github.io/">CAD-bench</a> · <a href="https://eda-bench.github.io/">EDA-bench</a> · <a href="https://github.com/dhruv9saini/image-model-arithmetic.github.io">Website source</a></p><p class="template-credit">Adapted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template">Academic Project Page template</a> and <a href="https://nerfies.github.io/">Nerfies</a>. Template: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p></div></footer>
+</body></html>

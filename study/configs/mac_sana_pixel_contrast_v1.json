@@ -1,0 +1,61 @@
+{
+  "experiment": "mac-sana-pixel-contrast-v1",
+  "status": "Prospective follow-up registered during pixel update 200\u2013600 segment, before its update-600 output",
+  "trigger": "Eligible only if pixel update 600 addition is below 8/40 AND copying below 5/10 on the fixed development panel; no independent evaluation observed",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "initial_adapter": "Most recent complete pixel-arm checkpoint when admission stops its continuation after the unsuccessful update-600 panel; exact step and digest recorded at admission; fresh optimizer and RNG",
+  "trainable": "existing rank-32 attention adapters and output projection; additionally the final four blocks' feed-forward networks, every feed-forward depthwise convolution, every scale-shift table, the original input patch projection, and a bias-free per-patch 34-to-2304 image conditioning projection",
+  "conditioning": "Top nine rows of clean reference VAE latents: each 32-channel image patch plus two fixed spatial coordinates is projected independently into the existing caption channel. There is no mixing of patches or symbolic arithmetic in the projection. The original SANA cross-attention processes these 144 image tokens.",
+  "objective": "Original answer-masked pure-noise flow MSE plus original foreground-weighted decoded pixel MSE plus 0.1 times mean carry/units cross-entropy from negative decoded glyph-template distances",
+  "pixel_region": [
+    128,
+    288,
+    384,
+    512
+  ],
+  "foreground_weight": "1 + 4 * target darkness, with pixels in [-1,1]",
+  "vae": "original frozen SANA decoder; BF16 autocast with float32 master weights; no learned answer classifier",
+  "inference": "one Euler step from fresh Gaussian answer noise at sigma=1; pretrained SANA and VAE with a per-patch linear input adapter; clean raster operands only; no symbolic solver or answer candidates",
+  "training_sigma": 1.0,
+  "seed": 20260913,
+  "batch_size": 4,
+  "learning_rate": 0.0001,
+  "final_feedforward_learning_rate": 3e-05,
+  "weight_decay": 0.01,
+  "copy_only_updates": 200,
+  "copy_replay_probability_after_curriculum": 0.2,
+  "updates": 2000,
+  "development_endpoints": [
+    200,
+    600,
+    1200,
+    2000
+  ],
+  "checkpoint_selection": "addition then copying exactness on the existing fixed development panel; earliest tie",
+  "resource_pilot": {
+    "updates": 10,
+    "median_update_seconds_maximum": 10.0,
+    "discard_pilot_optimizer_and_weights": true
+  },
+  "execution_budget_revision": "Measured parent execution costs about 7.3 seconds per update with CPU weight eviction during the decoder VJP. Admit no more than ten seconds per update for this prospective objective.",
+  "evaluation_seeds": {
+    "local": 2200913,
+    "program": 3300913,
+    "program_noise": 4400913
+  },
+  "gates": {
+    "local_exact_minimum": 0.95,
+    "unfamiliar_style_exact_minimum": 0.8,
+    "each_program_length_exact_minimum": 0.9
+  },
+  "claim_boundary": "Adaptation of a public pretrained image diffusion model to one-step image generation. All elementary addition facts are supervised; evaluation concerns visual transfer and composition. No claim of pretraining advantage, withheld-fact induction, or autonomous routing.",
+  "contrast": {
+    "weight": 0.1,
+    "temperature": 0.01,
+    "pool": 4,
+    "bank": "20 rendered training answers; two carry templates and ten unit templates, used only by the training loss",
+    "inference_use": false
+  },
+  "initialization_revision": "Before any contrast-arm execution: the parent trainer retained its development-selected update 200 and rolling resume, but did not retain the tied update-600 weights. Preserve that evidence and use the latest complete rolling parent checkpoint instead of asserting nonexistent update-600 provenance."
+}

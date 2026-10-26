@@ -1,0 +1,73 @@
+{
+  "experiment": "mac-sana-pixel-ocr-v1",
+  "status": "Prospective conditional follow-up registered before contrast update-1200 outputs",
+  "trigger": "Eligible only if contrast update 1200 has fewer than 8/40 template-correct additions, before any independent evaluation; preserve and stop that parent before any critic or model training",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "initial_adapter": "Exact completed contrast update-1200 checkpoint, recorded at admission; fresh optimizer and random generators",
+  "trainable": "existing rank-32 attention adapters and output projection; additionally the final four blocks' feed-forward networks, every feed-forward depthwise convolution, every scale-shift table, the original input patch projection, and a bias-free per-patch 34-to-2304 image conditioning projection",
+  "conditioning": "Top nine rows of clean reference VAE latents: each 32-channel image patch plus two fixed spatial coordinates is projected independently into the existing caption channel. There is no mixing of patches or symbolic arithmetic in the projection. The original SANA cross-attention processes these 144 image tokens.",
+  "objective": "Original answer-masked pure-noise flow MSE plus original foreground-weighted decoded pixel MSE plus 0.1 times frozen digit-recognizer cross-entropy on the generated carry and units crops",
+  "pixel_region": [
+    128,
+    288,
+    384,
+    512
+  ],
+  "foreground_weight": "1 + 4 * target darkness, with pixels in [-1,1]",
+  "vae": "original frozen SANA decoder; BF16 autocast with float32 master weights; no learned answer classifier",
+  "inference": "Unchanged one Euler step from fresh Gaussian answer noise; original pretrained SANA and original VAE decoder; image conditioning only; the digit recognizer is absent and no answer candidates or symbolic solver are used",
+  "training_sigma": 1.0,
+  "seed": 20260914,
+  "batch_size": 4,
+  "learning_rate": 0.0001,
+  "final_feedforward_learning_rate": 3e-05,
+  "weight_decay": 0.01,
+  "copy_only_updates": 0,
+  "copy_replay_probability_after_curriculum": 0.2,
+  "updates": 2000,
+  "development_endpoints": [
+    400,
+    1000,
+    2000
+  ],
+  "checkpoint_selection": "addition then copying exactness on the existing fixed development panel; earliest tie",
+  "resource_pilot": {
+    "updates": 10,
+    "median_update_seconds_maximum": 10.0,
+    "discard_pilot_optimizer_and_weights": true
+  },
+  "execution_budget_revision": "Original ten-second median update ceiling retained; time ten complete updates including the new frozen critic before admitting the schedule.",
+  "evaluation_seeds": {
+    "local": 2200914,
+    "program": 3300914,
+    "program_noise": 4400914
+  },
+  "gates": {
+    "local_exact_minimum": 0.95,
+    "unfamiliar_style_exact_minimum": 0.8,
+    "each_program_length_exact_minimum": 0.9
+  },
+  "claim_boundary": "Adaptation of a public pretrained image diffusion model to one-step image generation. All elementary addition facts are supervised; evaluation concerns visual transfer and composition. No claim of pretraining advantage, withheld-fact induction, or autonomous routing.",
+  "critic": {
+    "architecture": "Three small convolutions and a ten-digit linear readout; grayscale 32 by 32 output crops only",
+    "weight": 0.1,
+    "training_only": true,
+    "sees_operands": false,
+    "arithmetic_training": false,
+    "font": "training font only",
+    "seed": 7120914,
+    "updates": 600,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "validation_seed": 8120914,
+    "validation_cases": 1000,
+    "minimum_validation_accuracy": 0.99,
+    "canonical_digits_correct_required": 10,
+    "cpu_mps_loss_absolute_tolerance": 0.0001,
+    "cpu_mps_gradient_relative_l2_tolerance": 0.0001,
+    "minimum_control_gradient_norm": 1e-06,
+    "control_gradient_descent_step": 0.001,
+    "control_loss_must_decrease": true
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "experiment": "mac-sana-binary-long-v1",
+  "status": "Prospective conditional length-extension evaluation; no further training",
+  "admission": "Run only after mac-sana-binary-v1 has completed generation, controls, export, fixed demo and independent audit, with audited_success and integrity_passed both true. All previous model and checkpoint serialization jobs must have exited.",
+  "parent_protocol_sha256": "ee2f4b60519dc0ae665718dd35e0f0bb23ef735460b39569766ac0a5dc1646ad",
+  "checkpoint": "The exact best checkpoint chosen by the unchanged parent development rule; record its full SHA-256 at admission. No weight or sampling changes.",
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "inference": "Identical parent one-step sampler, original VAE, input font and raw generated carry crop. The only extension is the number of calls in the supplied right-to-left column schedule. No OCR, solver, candidate selection or output repair in generation.",
+  "lengths": [
+    32,
+    64
+  ],
+  "random_programs_per_length": 32,
+  "program_seed": 3300916,
+  "noise_seed": 4400916,
+  "random_generation": "NumPy default_rng; sample LSB-first bit vectors with top bit one for each operand; reject duplicate ordered pairs within each length; keep the first 32 unique pairs.",
+  "stress_programs_per_length": [
+    "maximum-plus-one",
+    "maximum-plus-maximum"
+  ],
+  "stage_seed": "noise_seed + length*10000 + program_index*1000 + stage; random program indices 0..31, stress indices 100 and 101",
+  "readers": "Unchanged parent ten-digit template banks and Tesseract 5.5.3, crop [128,300,384,488], psm 7, whitelist 0123456789. Require exactly two binary digits after removing whitespace. No repairs or narrowed whitelist.",
+  "gates": {
+    "random_correct_per_length_minimum": 29,
+    "random_count_per_length": 32,
+    "stress_correct_required": 4,
+    "program_exactness": "A program counts as correct only if every intermediate subtotal and the final answer are numerically correct and every generated output is valid under both unchanged readers.",
+    "both_readers_must_satisfy_every_gate": true,
+    "independent_integrity_audit_required": true
+  },
+  "exclusions": "None; malformed outputs and incomplete programs cannot count as correct.",
+  "resources": {
+    "minimum_disk_gib": 40,
+    "one_heavy_job_at_a_time": true,
+    "maximum_seconds_per_complete_image": 5.0,
+    "maximum_controller_hours": 6,
+    "resume": "Persist every generated stage and its input/output hashes and seed. On recovery validate the complete saved prefix and continue from its last unaltered carry crop."
+  },
+  "claim_boundary": "Length extension of visual composition of eight supervised elementary binary facts under a supplied column schedule. Not decimal arithmetic, autonomous algorithm discovery, unseen elementary-fact induction, or evidence that pretraining outperforms scratch training."
+}

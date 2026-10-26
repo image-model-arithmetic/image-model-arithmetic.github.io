@@ -1,0 +1,206 @@
+{
+  "base_model": "Efficient-Large-Model/Sana_600M_512px_diffusers",
+  "base_revision": "83d7a190bfd1fd070570a793d2dab5c7a3231b9d",
+  "batch_size": 4,
+  "binary": {
+    "development_all_variants": false,
+    "development_noise_seed": 1100921,
+    "development_rows": 80,
+    "early_stop": {
+      "addition_correct": 64,
+      "copy_correct": 16,
+      "step": 600
+    },
+    "fixed_export_demo": {
+      "bits": 4,
+      "left": 13,
+      "right": 7,
+      "seed": 20260915
+    },
+    "input_values": [
+      0,
+      1
+    ],
+    "local_cases_per_style": 200,
+    "local_facts": 8,
+    "local_repetitions_per_fact": 25,
+    "output_encoding": "Separate carry and units glyphs; record display label 10*carry+units for existing glyph losses, numeric value 2*carry+units for binary arithmetic",
+    "program_generation": "NumPy default_rng; sample both LSB-first bit vectors, set highest bit to one; reject duplicate ordered operand pairs within each length; retain first 32 unique pairs",
+    "program_lengths": [
+      4,
+      8,
+      16
+    ],
+    "programs_per_length": 32,
+    "radix": 2,
+    "readout": "Unchanged ten-digit template banks and fixed Tesseract two-digit decimal whitelist; reject outputs containing any digit other than 0 or 1; no narrowed binary whitelist or correction",
+    "training_rows": 960,
+    "unfamiliar_style_scope": "Only the input font changes; the supervised output convention remains training-font carry and units glyphs. Both fixed template banks remain permitted and the unchanged OCR parser may reject any malformed or unreadable output.",
+    "variants": 12
+  },
+  "checkpoint_selection": "Addition then copying exactness on the fixed 80-image appearance development split; earliest tie. Stop at update 600 only if all 64 additions and 16 copies are template correct.",
+  "claim_boundary": "Binary arithmetic after a broader supervised input-font and appearance curriculum on the same pretrained SANA. All eight elementary facts are supervised. New noise and programs, and one held-out Iosevka input font. Earlier decimal and font-transfer failures remain failures. No pretraining advantage, withheld-fact inference, autonomous scheduling, or small-total-training claim.",
+  "conditioning": "Top nine rows of clean reference VAE latents: each 32-channel image patch plus two fixed spatial coordinates is projected independently into the existing caption channel. There is no mixing of patches or symbolic arithmetic in the projection. The original SANA cross-attention processes these 144 image tokens.",
+  "copy_only_updates": 0,
+  "copy_replay_probability_after_curriculum": 0.1,
+  "critic": {
+    "architecture": "Three small convolutions and a ten-digit linear readout; grayscale 32 by 32 output crops only",
+    "arithmetic_training": false,
+    "batch_size": 64,
+    "canonical_digits_correct_required": 10,
+    "control_gradient_descent_step": 0.001,
+    "control_loss_must_decrease": true,
+    "cpu_mps_gradient_relative_l2_tolerance": 0.0001,
+    "cpu_mps_loss_absolute_tolerance": 0.0001,
+    "font": "training font only",
+    "learning_rate": 0.001,
+    "minimum_control_gradient_norm": 1e-06,
+    "minimum_validation_accuracy": 0.99,
+    "seed": 7120914,
+    "sees_operands": false,
+    "training_only": true,
+    "updates": 600,
+    "validation_cases": 1000,
+    "validation_seed": 8120914,
+    "weight": 0.1
+  },
+  "critic_sha256": "85547605ecfc09128551c9876e8c4c2ad900312141135048390f282bcca4e103",
+  "critic_validation_protocol_sha256": "109d46c81e52a28e5b3b500b4e5ea9861cd50529cf44a2c8a2d5dbfa3a806228",
+  "development_endpoints": [
+    200,
+    600,
+    1200
+  ],
+  "evaluation": {
+    "lengths": [
+      4,
+      8,
+      16
+    ],
+    "local_cases": 200,
+    "programs_per_length": 32
+  },
+  "evaluation_seeds": {
+    "local": 2200921,
+    "program": 3300921,
+    "program_noise": 4400921
+  },
+  "execution_budget_revision": "Original ten-second median update ceiling retained; time ten complete updates including the new frozen critic before admitting the schedule.",
+  "experiment": "mac-sana-binary-font-grid-v1",
+  "final_feedforward_learning_rate": 3e-05,
+  "font_grid": {
+    "assignment": "Full Cartesian product of 8 fonts, 4 positions, 3 stroke widths, and the same 8 addition plus 2 copy facts. Development has every font/fact at a separate position; development rows are excluded from every optimizer sample.",
+    "development_images": 80,
+    "development_position": [
+      5,
+      -5
+    ],
+    "development_stroke_width": 1,
+    "heldout_font": {
+      "bytes": 14447488,
+      "path": "fonts/transfer.ttf",
+      "sha256": "5e3f3b0a70fcdc5f1ace66ecad69b9913dfd8822fee221dc5e552c7dbc8c17df"
+    },
+    "heldout_use": "First Iosevka model outputs occur in the frozen independent evaluation. Font raster portability checks perform no model inference.",
+    "output": "Every answer is rendered in the original LiberationSans-Bold convention. Only input glyphs are augmented; target context exactly equals the answer-free reference.",
+    "prior_failures": "The two previously tested monospace fonts are explicitly training inputs in this new experiment. Their previous evaluations remain failures. Iosevka is excluded from training and development.",
+    "training_fonts": [
+      {
+        "bytes": 414568,
+        "path": "fonts/train.ttf",
+        "sha256": "769673c4355020b1e28a14c366a152da410ab6b16239fe883ebc35b73624835b"
+      },
+      {
+        "bytes": 410820,
+        "path": "fonts/input-sans-regular.ttf",
+        "sha256": "baccc64becc3eb7d104b7c84d99f5314a0a1f896e2b3ea6c2f22fc08d2003bee"
+      },
+      {
+        "bytes": 393692,
+        "path": "fonts/input-serif-regular.ttf",
+        "sha256": "86b9ea1c2f41bed9d7c09ccad4abc2894b33df5de60e5bbbece5d48610911870"
+      },
+      {
+        "bytes": 856800,
+        "path": "fonts/input-free-sans.otf",
+        "sha256": "d3e9138ccf76ef516cc6af867e4e7ed8776331947235824f924c5886186b0c80"
+      },
+      {
+        "bytes": 319624,
+        "path": "fonts/input-liberation-mono.ttf",
+        "sha256": "47ed5b5fcfe6b3c9228937b05de9c769f5fa55b777d539af0f65172f0a24c90b"
+      },
+      {
+        "bytes": 430884,
+        "path": "fonts/input-free-mono.otf",
+        "sha256": "daf720e115bc462f721cdf3065697b75fea033bf46d4598d3a727fce4b036032"
+      },
+      {
+        "bytes": 2047320,
+        "path": "fonts/input-free-serif.otf",
+        "sha256": "aab33b5d0efd450d3ac3153b176f542315e171db79e494aa287cd940ae16231b"
+      },
+      {
+        "bytes": 1419152,
+        "path": "fonts/input-adwaita-mono.ttf",
+        "sha256": "ffc549b7fc28057d624086111f1ba0b1f752d2d7ff7c5363dfa064e4dca17d47"
+      }
+    ],
+    "training_images": 960,
+    "training_positions": [
+      [
+        0,
+        0
+      ],
+      [
+        -3,
+        2
+      ],
+      [
+        3,
+        -2
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "training_stroke_widths": [
+      0,
+      1,
+      2
+    ]
+  },
+  "foreground_weight": "1 + 4 * target darkness, with pixels in [-1,1]",
+  "gates": {
+    "each_program_length_exact_minimum": 0.9,
+    "local_exact_minimum": 0.95,
+    "unfamiliar_style_exact_minimum": 0.8
+  },
+  "inference": "Unchanged one Euler step from fresh Gaussian answer noise; original pretrained SANA and original VAE decoder; image conditioning only; the digit recognizer is absent and no answer candidates or symbolic solver are used",
+  "initial_adapter": "Exact selected G update-200 checkpoint, with fresh optimizer and random generators",
+  "initial_checkpoint_sha256": "c8236ab7c5f6c1a7381e7daf3dfdf2d49a1f6d75e1ce250fb94e6bb30e83b71e",
+  "initial_checkpoint_step": 200,
+  "learning_rate": 0.0001,
+  "objective": "Original answer-masked pure-noise flow MSE plus original foreground-weighted decoded pixel MSE plus 0.1 times frozen digit-recognizer cross-entropy on the generated carry and units crops",
+  "pixel_region": [
+    128,
+    288,
+    384,
+    512
+  ],
+  "require_stage_seed_receipts": true,
+  "resource_pilot": {
+    "discard_pilot_optimizer_and_weights": true,
+    "median_update_seconds_maximum": 10.0,
+    "updates": 10
+  },
+  "seed": 20260921,
+  "status": "Prospective font and appearance grid; no model execution at registration",
+  "trainable": "existing rank-32 attention adapters and output projection; additionally the final four blocks' feed-forward networks, every feed-forward depthwise convolution, every scale-shift table, the original input patch projection, and a bias-free per-patch 34-to-2304 image conditioning projection",
+  "training_sigma": 1.0,
+  "trigger": "After the complete G independent integrity audit, G export/demo completion, and the earlier conditional long/carry decisions; regardless of G mathematical failure",
+  "updates": 1200,
+  "vae": "original frozen SANA decoder; BF16 autocast with float32 master weights; no learned answer classifier",
+  "weight_decay": 0.01
+}

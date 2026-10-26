@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "source": {
+    "title": "Can Generative Image Models Reason Through Each Other\u2019s Outputs?",
+    "author": "Dhruv Saini",
+    "paper": "../paper/image-model-arithmetic.pdf",
+    "paper_sha256": "1f098785349d9be1c7aab1aebd3d0dabb990144e28f811c3f32c18c427ce9f57",
+    "version": "Full preprint prepared 2026-10-03",
+    "locations": [
+      "Results: Table 1 (modulo-23 model pairs)",
+      "Results: Table 2 (alternating multiplication)",
+      "Figure 2 (binary interface matrix)",
+      "Appendix: modulo-23 training runs"
+    ]
+  },
+  "mod23": {
+    "modulus": 23,
+    "unordered_pairs": 276,
+    "train_pairs": 184,
+    "development_pairs": 46,
+    "test_pairs": 46,
+    "trained_runs": 5,
+    "selected_runs": 3,
+    "development_selection_min_correct": 40,
+    "first_step_correct": [
+      41,
+      44,
+      38
+    ],
+    "first_step_total_per_run": 46,
+    "all_different_model_trials": 276,
+    "both_correct": 210,
+    "clean_success_conditioned_trials": 215
+  },
+  "multiplication": [
+    {
+      "operand_bits": 2,
+      "programs": 16,
+      "correct_products": 16,
+      "calls_per_program": 6,
+      "longest_dependent_sequence_calls": null
+    },
+    {
+      "operand_bits": 4,
+      "programs": 20,
+      "correct_products": 20,
+      "calls_per_program": 28,
+      "longest_dependent_sequence_calls": 9
+    },
+    {
+      "operand_bits": 8,
+      "programs": 20,
+      "correct_products": 20,
+      "calls_per_program": 120,
+      "longest_dependent_sequence_calls": 21
+    }
+  ],
+  "matrices": {
+    "mod23": {
+      "models": [
+        "Run 1",
+        "Run 2",
+        "Run 3"
+      ],
+      "cells": [
+        [
+          [
+            36,
+            36
+          ],
+          [
+            37,
+            39
+          ],
+          [
+            31,
+            33
+          ]
+        ],
+        [
+          [
+            37,
+            38
+          ],
+          [
+            41,
+            42
+          ],
+          [
+            36,
+            36
+          ]
+        ],
+        [
+          [
+            33,
+            33
+          ],
+          [
+            36,
+            36
+          ],
+          [
+            30,
+            30
+          ]
+        ]
+      ],
+      "cell_description": "Correct second answers when the first drawing is correct and the clean-digit version succeeds.",
+      "explanation": "Each cell counts correct next answers among trials where the first drawing is read correctly and the second model solves the clean-digit version.",
+      "total_description": "Different models: 210 / 215 (97.7%). All planned different-model trials: 210 / 276 (76.1%)."
+    },
+    "binary": {
+      "models": [
+        "SANA",
+        "MLP 1",
+        "MLP 2",
+        "MLP 3",
+        "CNN 1",
+        "CNN 2",
+        "CNN 3"
+      ],
+      "cells": [
+        [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        [
+          14,
+          16,
+          16,
+          15,
+          16,
+          16,
+          15
+        ],
+        [
+          14,
+          16,
+          15,
+          16,
+          16,
+          16,
+          16
+        ],
+        [
+          14,
+          16,
+          16,
+          15,
+          16,
+          16,
+          15
+        ],
+        [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ],
+        [
+          16,
+          16,
+          16,
+          16,
+          16,
+          16,
+          16
+        ]
+      ],
+      "cell_description": "Correct next answers from the original generated digits; both digit readers must agree.",
+      "explanation": "Each cell contains 16 one-column binary-addition tests using drawings from the source model. All eight local input combinations are included in training.",
+      "total_description": "Different models: 663 / 672 (98.7%). Scratch CNN \u2194 SANA-based models: 382 / 384 correct."
+    },
+    "appearance": {
+      "models": [
+        "SANA",
+        "MLP 1",
+        "MLP 2",
+        "MLP 3",
+        "CNN 1",
+        "CNN 2",
+        "CNN 3"
+      ],
+      "cells": [
+        [
+          -1,
+          0,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          -1,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          -2,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          -2,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "cell_description": "Change in correct answers after making the same generated digits black and white.",
+      "explanation": "Change in correct answers after converting the same drawings to black and white. Blue means more correct answers; red means fewer. Both readers still identify all 56 drawings as the same digits.",
+      "total_description": "Across all 784 tests, 20 answers change: 8 wrong \u2192 right and 12 right \u2192 wrong. The arithmetic, receiving model and selected drawing stay fixed."
+    }
+  }
+}
